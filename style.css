@@ -1,0 +1,173 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: white; /* Change to white background */
+  font-family: 'Arial', sans-serif;
+  overflow: hidden; /* Prevent scrollbars */
+  position: relative; /* For positioning clouds and particles */
+}
+
+/* Text container */
+.container {
+  text-align: center;
+  z-index: 10; /* Text in front of particles and clouds */
+}
+
+h1 {
+  font-size: 2.5rem;
+  animation: hoverAnimation 3s ease-in-out infinite;
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#text {
+  font-size: 3rem; /* Adjust font size */
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #ff66b2, #ffccff); /* Gradient background */
+  -webkit-background-clip: text; /* For webkit browsers */
+  background-clip: text; /* For other browsers */
+  -webkit-text-fill-color: transparent; /* Text color is transparent */
+}
+
+#text span.lovey {
+  background: linear-gradient(45deg, #ff99cc, #ff3399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#happy {
+  font-family: 'Courier New', monospace; /* Change to a different font */
+  font-size: 4rem; /* Larger font size */
+  font-weight: bold; /* Thicker font */
+  margin-top: 10px; /* Space between the lines */
+  animation: moveHappy 3s ease-in-out infinite; /* Add movement animation */
+  background: linear-gradient(45deg, #ff99cc, #ff3399, #ff66b2, #ffccff); /* Gradient effect for "Happy 1st Monthsary" */
+  -webkit-background-clip: text; /* For webkit browsers */
+  background-clip: text; /* For other browsers */
+  -webkit-text-fill-color: transparent; /* Text color is transparent */
+}
+
+/* Movement Animation for "Happy 1st Monthsary" */
+@keyframes moveHappy {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px); /* Move up slightly */
+  }
+}
+
+@keyframes hoverAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+h1:hover {
+  color: #ffccff;
+}
+
+/* Envelope styles */
+.envelope {
+  position: relative;
+  width: 200px; /* Width of the envelope */
+  height: 120px; /* Height of the envelope */
+  cursor: pointer;
+  margin: 20px auto;
+  z-index: 10; /* Ensure it stays above particles and clouds */
+}
+
+.envelope-flap {
+  position: absolute;
+  width: 100%;
+  height: 60px; /* Height of the flap */
+  background: linear-gradient(135deg, #ff6699, #ff3399); /* Gradient color for the flap */
+  clip-path: polygon(0 0, 100% 0, 50% 100%); /* Triangle flap */
+  transition: transform 0.5s ease; /* Flap animation */
+  transform-origin: bottom; /* Flap opens from the bottom */
+}
+
+.envelope-body {
+  width: 100%;
+  height: 100%;
+  background: #ff99cc; /* Color of the body */
+  position: absolute;
+  top: 0; /* Position at the top of the flap */
+  transition: transform 0.5s ease; /* Body animation */
+}
+
+/* Open envelope animation */
+.envelope.open .envelope-flap {
+  transform: rotateX(-180deg); /* Flap rotates back */
+}
+
+.envelope.open .envelope-body {
+  transform: translateY(20px); /* Body moves slightly down */
+}
+
+/* Particle styles */
+.particle {
+  position: absolute;
+  width: 5px; /* Smaller particles */
+  height: 5px;
+  background: rgba(255, 0, 0, 0.8); /* Soft red color */
+  border-radius: 50%;
+  animation: floatParticles 10s linear infinite;
+}
+
+@keyframes floatParticles {
+  0% {
+    transform: translateY(100vh) scale(0.5);
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+  }
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1); /* Soft translucent clouds */
+  border-radius: 50%;
+  filter: blur(30px); /* Blur effect to resemble clouds */
+  animation: moveClouds 60s linear infinite;
+}
+
+.cloud-small {
+  width: 150px;
+  height: 80px;
+  top: 20%;
+}
+
+.cloud-medium {
+  width: 200px;
+  height: 100px;
+  top: 40%;
+}
+
+.cloud-large {
+  width: 250px;
+  height: 120px;
+  top: 60%;
+}
+
+@keyframes moveClouds {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

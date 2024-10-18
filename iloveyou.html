@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthsary Envelope Animation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet"> <!-- Handwriting font -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column; /* Align text and envelope vertically */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black; /* Black background */
+            font-family: 'Arial', sans-serif;
+            position: relative; /* For positioning particles */
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* Text container */
+        .container {
+            text-align: center;
+            z-index: 2; /* Set higher z-index */
+            position: relative; /* For stacking */
+            transition: opacity 0.4s ease; /* Fade out effect */
+        }
+
+        h1 {
+            font-size: 3rem;
+            animation: hoverAnimation 1.5s ease infinite alternate;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffb3b3);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            animation: hoverAnimation 1.5s ease infinite alternate;
+        }
+
+        /* Envelope styling */
+        .envelope {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            background: #ff9a9a;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: height 0.4s ease;
+            margin-top: 80px; /* Increased space between text and envelope */
+            z-index: 1; /* Ensure it stays above the background */
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: -50px; /* Adjust to raise the flap */
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 50px solid #ff7a7a; /* Flap color */
+            transition: top 0.4s ease;
+        }
+
+        .envelope.open {
+            height: 150px; /* Expand the height when open */
+        }
+
+        .envelope.open::before {
+            top: 0; /* Move the flap down */
+        }
+
+        /* Paper effect styling */
+        .paper {
+            position: fixed; /* Use fixed position for full screen effect */
+            top: 50%; /* Center it vertically */
+            left: 50%; /* Center it horizontally */
+            transform: translate(-50%, -50%) scale(0); /* Initially hidden and scaled down */
+            width: 80vw; /* Width of the paper */
+            height: 80vh; /* Height of the paper */
+            background: white; /* White color for the paper */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.4s ease, transform 0.4s ease; /* Smooth transition */
+            pointer-events: none; /* Prevent clicks on paper initially */
+            z-index: 3; /* Ensure paper is above particles and behind text */
+            border-radius: 10px; /* Rounded edges */
+            padding: 40px; /* Padding for text */
+            display: flex; /* Flexbox for centering text */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            flex-direction: column; /* Align text vertically */
+        }
+
+        .envelope.open + .paper {
+            opacity: 1; /* Show paper when envelope is open */
+            transform: translate(-50%, -50%) scale(1); /* Raise it and scale up */
+            pointer-events: auto; /* Enable clicks on paper */
+        }
+
+        /* Move text and envelope behind the paper when open */
+        .envelope.open ~ .container {
+            z-index: -1; /* Lower z-index to send behind the paper */
+            opacity: 0; /* Fade out effect */
+        }
+
+        @keyframes hoverAnimation {
+            0% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(10px);
+            }
+        }
+
+        /* Particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 192, 203, 0.8);
+            border-radius: 50%;
+            animation: rise 5s linear infinite;
+            z-index: 0; /* Ensure particles are at the back */
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(100vh); /* Start from the bottom of the viewport */
+            }
+            100% {
+                transform: translateY(-100vh); /* Move to completely out of the viewport */
+            }
+        }
+
+        /* Letter styling */
+        .letter {
+            font-family: 'Dancing Script', cursive; /* Handwriting font */
+            font-size: 1.5rem; /* Increase font size */
+            color: #333;
+            line-height: 1.5; /* Add some space between lines */
+            white-space: pre-line; /* Preserve line breaks */
+            z-index: 1; /* Ensure the letter is above the paper background */
+            margin: 0; /* Reset margin for letter */
+            text-align: center; /* Center the text */
+            position: relative; /* For positioning the close button */
+        }
+
+        /* Close button styling */
+        .close-btn {
+            position: absolute;
+            top: 20px; /* Adjust to position the button */
+            right: 20px; /* Adjust to position the button */
+            background: #ff6b6b; /* Close button color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 50%; /* Circular button */
+            width: 30px; /* Button width */
+            height: 30px; /* Button height */
+            font-size: 1.2rem; /* Font size for close icon */
+            cursor: pointer; /* Pointer on hover */
+            transition: background 0.3s; /* Smooth background transition */
+        }
+
+        .close-btn:hover {
+            background: #ff4f4f; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>I love you, Lovey.</h1>
+        <h2>Happy 1st Monthsary</h2>
+    </div>
+    <div class="envelope" onclick="toggleEnvelope(event)"></div> <!-- Envelope positioned below text -->
+    <div class="paper" onclick="event.stopPropagation()">
+        <button class="close-btn" onclick="closePaper(event)">✖</button> <!-- Close button -->
+        <div class="letter">
+            My Dearest lovey,
+
+            As we celebrate our monthsary, I just want to take a moment to express my deepest gratitude for you. Thank you for always being by my side, for being my rock when things get tough, and for never leaving me, even when the going gets tough. Your unwavering support means the world to me.
+
+            Salamat sa pagkakataon na binigay mo sa akin para magbago. Your faith in me has inspired me to become a better person, to correct the mistakes I made in the past. I want you to know that I truly appreciate your patience and understanding. Mahal na mahal kita, higit pa sa mga salita ang kayang ipahayag ito.
+
+            You are truly the girl of my dreams. I admire your strength and determination to pursue your dreams, and I want you to know that I will always be here to support you in every step of the way. While you chase your dreams, I am right here, cheering you on, hoping to fulfill my own dreams alongside you.
+
+            Thank you for everything—your love, your kindness, and the happiness you bring into my life. I look forward to creating more beautiful memories with you. Happy monthsary, my love!
+
+            With all my heart,
+            Jin
+        </div>
+    </div> <!-- Paper that appears when the envelope is opened -->
+
+    <!-- Audio element -->
+    <audio id="background-audio" src="Oksihina.mp3" loop></audio>
+
+    <script>
+        // Particle generation
+        const numberOfParticles = 100; // Adjust this for more or fewer particles
+        const body = document.body;
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 10 + 5; // Random size for each particle
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+            particle.style.animationDuration = Math.random() * 5 + 3 + 's'; // Random animation duration
+            body.appendChild(particle);
+        }
+
+        // Toggle envelope animation and audio
+        function toggleEnvelope(event) {
+            const envelope = event.currentTarget;
+            envelope.classList.toggle('open'); // Toggle open class
+            const audio = document.getElementById('background-audio');
+
+            if (envelope.classList.contains('open')) {
+                audio.play(); // Play audio when opened
+                const paper = document.querySelector('.paper');
+                paper.style.opacity = 1; // Show the paper
+                paper.style.transform = 'translate(-50%, -50%) scale(1)'; // Raise it
+                paper.style.pointerEvents = 'auto'; // Enable clicks on paper
+            } else {
+                audio.pause(); // Pause audio when closed
+                audio.currentTime = 0; // Reset audio to start
+                const paper = document.querySelector('.paper');
+                paper.style.opacity = 0; // Fade out the paper
+                paper.style.transform = 'translate(-50%, -50%) scale(0)'; // Scale down the paper
+                paper.style.pointerEvents = 'none'; // Disable clicks on paper
+                document.querySelector('.container').style.opacity = 1; // Fade back in the text
+            }
+        }
+
+        // Close the paper
+        function closePaper(event) {
+            const paper = document.querySelector('.paper');
+            const envelope = document.querySelector('.envelope');
+            envelope.classList.remove('open'); // Close the envelope
+            paper.style.opacity = 0; // Fade out the paper
+            paper.style.transform = 'translate(-50%, -50%) scale(0)'; // Scale down the paper
+            paper.style.pointerEvents = 'none'; // Disable clicks on paper
+            const audio = document.getElementById('background-audio');
+            audio.pause(); // Pause audio when closing the paper
+            audio.currentTime = 0; // Reset audio to start
+            document.querySelector('.container').style.opacity = 1; // Fade back in the text
+        }
+    </script>
+</body>
+</html>
